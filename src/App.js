@@ -9,6 +9,7 @@ class Ticker extends Component {
             text: 'Pause ticker'
         }
     }
+
     clear() {
         this.setState({
             count: 0,
@@ -17,22 +18,31 @@ class Ticker extends Component {
         })
         clearInterval(this.interval)
     }
+
     resume() {
         this.interval = setInterval(() => {
-            this.setState({count: this.state.count + 3})
+            this.setState({
+                count: this.state.count + 3
+            })
         }, 3000)
-        this.setState({paused: false, text: 'Pause ticker'})
+        this.setState({
+            paused: false, 
+            text: 'Pause ticker'
+        })
     }
+
     pause() {
         clearInterval(this.interval)
-        this.setState({paused: true, text: 'Unpause ticker'})
+        this.setState({
+            paused: true, 
+            text: 'Unpause ticker'
+        })
     }
+
     componentDidMount() {
         this.resume()
     }
-    shouldComponentUpdate(nextProps, nextState) {
-        return nextState.count % 3 === 0
-    }
+
     render() {
         return (
             <div className='counter'>
