@@ -6,7 +6,7 @@ class Ticker extends Component {
     this.state = {
       count: 0,
       paused: false,
-      setInt: null
+      intervalId: null
     }
   }
 
@@ -17,27 +17,30 @@ class Ticker extends Component {
   }
 
   pause() {
-    if (this.state.paused) {
+    let id = this.state.intervalId
+    if (id) {
+      clearInterval(id)
+      this.setState({
+        paused: true,
+        intervalId: null
+      })
+    } else {
       let id = setInterval(() => {
         this.setState({
           count: this.state.count + 1,
-          setInt: id,
+          intervalId: id,
           paused: false
         })
-      }, 1000);
-    } else {
-      clearInterval(this.state.setInt)
-      this.setState({
-        paused: true
-      })
+      }, 1000) 
     }
   }
 
   componentDidMount() {
+    console.log('mounted')
     let id = setInterval(() => {
       this.setState({
         count: this.state.count + 1,
-        setInt: id
+        intervalId: id
       })
     }, 1000) 
   }
