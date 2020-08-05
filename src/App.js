@@ -51,7 +51,7 @@ class Ticker extends Component {
                     <button type='button' onClick={() => this.clear()}>Clear</button>
                     <br/>
                     <button type='button' onClick={this.state.paused ? () => this.resume() : () => this.pause()}>
-                        {this.state.paused ? this.state.text : this.state.text}
+                        {this.state.text}
                     </button>
                 </div>
             </div>
