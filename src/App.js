@@ -1,72 +1,51 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
 
 class Ticker extends Component {
-  constructor() {
-    super()
-    this.state = {
-      count: 0,
-      paused: false,
-      intervalId: null
+    constructor() {
+        super()
+        this.state = {
+            count: 0,
+            paused: true,
+            text: 'Pause ticker'
+        }
     }
-  }
-
-  clear() {
-    this.setState({
-      count: 0
-    })
-  }
-
-  pause() {
-    let id = this.state.intervalId
-    if (id) {
-      clearInterval(id)
-      this.setState({
-        paused: true,
-        intervalId: null
-      })
-    } else {
-      let id = setInterval(() => {
+    clear() {
         this.setState({
-          count: this.state.count + 1,
-          intervalId: id,
-          paused: false
+            count: 0,
+            paused: true,
+            text: 'Unpause ticker'
         })
-      }, 1000) 
+        clearInterval(this.interval)
     }
-  }
-
-  componentDidMount() {
-    console.log('mounted')
-    let id = setInterval(() => {
-      this.setState({
-        count: this.state.count + 1,
-        intervalId: id
-      })
-    }, 1000) 
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    if (nextState.count % 3 === 0) {
-      return true
-    } else {
-      return false
+    resume() {
+        this.interval = setInterval(() => {
+            this.setState({count: this.state.count + 3})
+        }, 3000)
+        this.setState({paused: false, text: 'Pause ticker'})
     }
-  }
-
-  render() {
-    return (
-      <div className='counter'>
-        <h1>The Count is: {this.state.count}</h1>
-        <div className='buttons'>
-          <button type='button' onClick={()=> this.clear()}>Clear</button>
-          <br></br>
-          <button type='button' onClick={()=> this.pause()}>
-            {this.state.paused ? 'Unpause Ticker' : 'Pause Ticker'}
-          </button>
-        </div>
-      </div>
-    )
-  }
+    pause() {
+        clearInterval(this.interval)
+        this.setState({paused: true, text: 'Unpause ticker'})
+    }
+    componentDidMount() {
+        this.resume()
+    }
+    shouldComponentUpdate(nextProps, nextState) {
+        return nextState.count % 3 === 0
+    }
+    render() {
+        return (
+            <div className='counter'>
+                <h1>The Count is: {this.state.count}</h1>
+                <div className='buttons'>
+                    <button type='button' onClick={() => this.clear()}>Clear</button>
+                    <br/>
+                    <button type='button' onClick={this.state.paused ? () => this.resume() : () => this.pause()}>
+                        {this.state.paused ? this.state.text : this.state.text}
+                    </button>
+                </div>
+            </div>
+        )
+    }
 }
-
-export default Ticker;
+export default Ticker
